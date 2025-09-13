@@ -1,15 +1,12 @@
 module.exports = {
-  content: [
-    "./*.html",
-    "./src/**/*.html",
-    "./src/**/*.js"
-  ],
+  darkMode: 'class',
+  content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
-      colors: {
-        primary: "#4f46e5",
-        secondary: "#10b981"
-      }
+      fontFamily: {
+        cake: ['Cookie', 'cursive'],      // untuk judul
+        body: ['Nunito', 'sans-serif'],   // untuk paragraf
+      },
     },
   },
   plugins: [],
