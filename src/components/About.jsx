@@ -26,14 +26,10 @@ export default function About() {
       className="py-20 px-7 bg-gradient-to-r from-yellow-50 to-yellow-400 dark:from-slate-600 dark:to-slate-900 flex flex-col items-center transition-colors duration-300"
     >
       {/* Konten About */}
-      <div className="flex flex-col items-center mb-12 text-center -mt-1 max-w-2xl">
-        <GiCakeSlice className="text-8xl text-yellow-700 dark:text-yellow-500 mb-4 drop-shadow-lg" />
-        <h2 className="text-6xl font-cake font-extrabold text-yellow-700 dark:text-yellow-400 mb-3 tracking-wide">
-          Firdaus Cake
+      <div className="flex flex-col items-center mb-12 text-center -mt-7 max-w-2xl">
+        <h2 className="text-5xl font-cake font-extrabold text-yellow-700 dark:text-yellow-400 mb-3 tracking-wide">
+          Tentang Kami
         </h2>
-        <p className="text-lg font-body text-yellow-800 dark:text-yellow-300 mb-4 italic">
-          “Manis dalam setiap potongan.”
-        </p>
         <p className="text-md font-body text-yellow-700 dark:text-yellow-300 leading-relaxed">
           Firdaus Cake hadir dengan cita rasa lembut, tampilan elegan, 
           dan sentuhan kehangatan di setiap sajian. Karena setiap momen 
@@ -42,14 +38,14 @@ export default function About() {
       </div>
 
       {/* Marquee Footer */}
-      <div className="overflow-hidden w-full mb-5">
+      <div className="overflow-hidden w-full mb-3">
         <div className="flex animate-marquee gap-4">
           {scrollImages.map((link, idx) => (
             <img
               key={idx}
               src={link}
               alt={`Gambar ${idx + 1}`}
-              className="w-60 h-45 object-cover rounded-lg drop-shadow-lg flex-shrink-0"
+              className="w-40 h-40 object-cover rounded-lg drop-shadow-lg flex-shrink-0"
             />
           ))}
         </div>

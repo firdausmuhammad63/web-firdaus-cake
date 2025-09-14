@@ -6,7 +6,7 @@ export default function Footer() {
   return (
     <footer className="bg-gradient-to-r from-yellow-50 via-yellow-200 to-yellow-400 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-12 text-center shadow-inner">
       <motion.div
-        className="max-w-3xl mx-auto flex flex-col items-center gap-5"
+        className="max-w-3xl mx-auto flex flex-col items-center -mt-3 gap-5"
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
@@ -21,12 +21,12 @@ export default function Footer() {
           viewport={{ once: true }}
         >
           <GiCakeSlice className="text-5xl text-slate-700 dark:text-white mr-2" />
-          <span className="font-cake text-slate-700 dark:text-white text-5xl">Firdaus Cake</span>
+          <span className="font-cake text-slate-700 dark:text-white -mt text-5xl">Firdaus Cake</span>
         </motion.h2>
 
         {/* Tagline */}
         <motion.p
-          className="text-gray-700 font-body text-sm dark:text-gray-400"
+          className="text-gray-700 font-body text-sm px-12 dark:text-gray-400"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
@@ -100,7 +100,7 @@ export default function Footer() {
           transition={{ duration: 0.6, delay: 0.6 }}
           viewport={{ once: true }}
         >
-          &copy; {new Date().getFullYear()} FirdausCake. Semua hak cipta dilindungi.
+          &copy; {new Date().getFullYear()} Firdaus Cake. Semua hak cipta dilindungi.
         </motion.p>
       </motion.div>
     </footer>

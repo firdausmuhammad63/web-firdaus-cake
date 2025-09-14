@@ -13,12 +13,13 @@ export default function Header({
   setCartOpen,
   searchQuery,
   setSearchQuery,
-  products = [], // Tambahkan products sebagai prop
-  onSearchResults, // Callback untuk hasil pencarian
+  products = [],
+  onSearchResults,
 }) {
   const navigate = useNavigate();
   const location = useLocation();
-  const [open, setOpen] = useState(false);
+
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const [showResults, setShowResults] = useState(false);
@@ -29,27 +30,44 @@ export default function Header({
   const searchRef = useRef(null);
   const desktopSearchRef = useRef(null);
 
+  // Scroll ke section
   const goToSection = (section) => {
-    setOpen(false);
+    setMobileMenuOpen(false);
     setSearchOpen(false);
     setShowResults(false);
 
-    if (location.pathname === "/") {
-      setTimeout(() => scrollToSection(section), 100);
+    const element = document.getElementById(section);
+
+    if (element) {
+      const headerHeight = document.querySelector("header")?.offsetHeight || 80;
+      window.scrollTo({
+        top: element.offsetTop - headerHeight,
+        behavior: "smooth",
+      });
     } else {
+      // jika sedang bukan di homepage, navigasi ke root dulu
       navigate("/", { state: { scrollTo: section }, replace: false });
     }
   };
 
-  const scrollToSection = (section) => {
-    const element = document.getElementById(section);
-    if (element) {
-      const headerHeight = document.querySelector("header")?.offsetHeight || 80;
-      window.scrollTo({ top: element.offsetTop - headerHeight, behavior: "smooth" });
+  // Jalankan scroll jika datang dari navigasi
+  useEffect(() => {
+    if (location.state?.scrollTo) {
+      const section = location.state.scrollTo;
+      const element = document.getElementById(section);
+      if (element) {
+        const headerHeight = document.querySelector("header")?.offsetHeight || 80;
+        window.scrollTo({
+          top: element.offsetTop - headerHeight,
+          behavior: "smooth",
+        });
+      }
+      // Bersihkan state agar tidak scroll lagi jika reload
+      window.history.replaceState({}, document.title);
     }
-  };
+  }, [location]);
 
-  // Fungsi pencarian yang case-insensitive
+  // Search logic
   const performSearch = (query) => {
     if (!query.trim()) {
       setSearchResults([]);
@@ -57,65 +75,40 @@ export default function Header({
       return;
     }
 
-    const filtered = products.filter(product =>
-      product.name.toLowerCase().includes(query.toLowerCase()) ||
-      product.category?.toLowerCase().includes(query.toLowerCase()) ||
-      product.description?.toLowerCase().includes(query.toLowerCase())
+    const filtered = products.filter(
+      (p) =>
+        p.name.toLowerCase().includes(query.toLowerCase()) ||
+        p.category?.toLowerCase().includes(query.toLowerCase()) ||
+        p.description?.toLowerCase().includes(query.toLowerCase())
     );
 
     setSearchResults(filtered);
     setShowResults(true);
-    
-    // Callback untuk parent component
-    if (onSearchResults) {
-      onSearchResults(filtered, query);
-    }
+
+    if (onSearchResults) onSearchResults(filtered, query);
   };
 
-  // Handle search input change
   const handleSearchChange = (e) => {
     const query = e.target.value;
     setSearchQuery(query);
     performSearch(query);
   };
 
-  // Handle search submit
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
       performSearch(searchQuery);
-      // Navigate to products section with search results
-      if (location.pathname !== "/") {
-        navigate("/", { state: { scrollTo: "products", searchQuery } });
-      } else {
-        scrollToSection("products");
-      }
-      setSearchOpen(false);
-      setShowResults(false);
+      goToSection("products");
     }
   };
 
-  // Handle product click from search results
-  const handleProductClick = (product) => {
-    setSearchOpen(false);
-    setShowResults(false);
-    setSearchQuery("");
-    // Navigate to product detail or add to cart
-    if (location.pathname !== "/") {
-      navigate("/", { state: { scrollTo: "products", selectedProduct: product.id } });
-    } else {
-      scrollToSection("products");
-    }
-  };
-
-  // Clear search
   const clearSearch = () => {
     setSearchQuery("");
     setSearchResults([]);
     setShowResults(false);
   };
 
-  // Close search if click outside
+  // Close search if clicked outside
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (
@@ -143,39 +136,59 @@ export default function Header({
       className="fixed top-0 w-full bg-gradient-to-r from-yellow-50 to-yellow-200 dark:from-gray-900 dark:to-slate-800 shadow-md z-50"
     >
       <div className="max-w-6xl mx-auto flex justify-between items-center p-4 md:p-6">
-        {/* Logo */}
-        <div
-          className="flex items-center gap-2 cursor-pointer"
-          onClick={() => {
-            navigate("/");
-            window.scrollTo({ top: 0, behavior: "smooth" });
-          }}
-        >
-          <GiCakeSlice className="text-3xl text-yellow-600 dark:text-yellow-400" />
-          <h1 className="text-3xl font-cake font-bold text-yellow-600 dark:text-yellow-400">
-            Firdaus Cake
-          </h1>
+
+        {/* LOGO + HAMBURGER MOBILE */}
+        <div className="flex items-center gap-4">
+          {/* Hamburger (Mobile Only) */}
+          <div className="md:hidden">
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="flex flex-col justify-center items-center w-8 h-8 gap-1.5 focus:outline-none"
+            >
+              <motion.span
+                animate={mobileMenuOpen ? { rotate: 45, y: 7 } : { rotate: 0, y: 0 }}
+                className="block w-6 h-0.5 bg-yellow-700 dark:bg-yellow-400 rounded"
+              />
+              <motion.span
+                animate={mobileMenuOpen ? { opacity: 0 } : { opacity: 1 }}
+                className="block w-6 h-0.5 bg-yellow-700 dark:bg-yellow-400 rounded"
+              />
+              <motion.span
+                animate={mobileMenuOpen ? { rotate: -45, y: -7 } : { rotate: 0, y: 0 }}
+                className="block w-6 h-0.5 bg-yellow-700 dark:bg-yellow-400 rounded"
+              />
+            </button>
+          </div>
+
+          {/* Logo */}
+          <div
+            className="flex items-center gap-2 cursor-pointer"
+            onClick={() => goToSection("home")}
+          >
+            <GiCakeSlice className="hidden md:block text-3xl text-yellow-600 dark:text-white mr-2" />
+            <h1 className="text-3xl font-cake font-bold text-yellow-600 dark:text-yellow-400">
+              Firdaus Cake
+            </h1>
+          </div>
         </div>
 
-        {/* Desktop Navbar */}
+        {/* DESKTOP NAVBAR */}
         <nav className="hidden md:flex space-x-4 items-center">
-          {["home", "products", "about", "contact", "pesanonline"].map(
-            (sec) => (
-              <button
-                key={sec}
-                onClick={() => goToSection(sec)}
-                className={`px-4 py-2 rounded-full transition font-semibold ${
-                  sec === "pesanonline"
-                    ? "bg-yellow-700 text-xs text-white hover:bg-orange-600"
-                    : "text-yellow-700 hover:text-white hover:bg-yellow-500 dark:text-yellow-400 dark:hover:text-white"
-                }`}
-              >
-                {sec === "pesanonline"
-                  ? "Pesan Online"
-                  : sec.charAt(0).toUpperCase() + sec.slice(1)}
-              </button>
-            )
-          )}
+          {["home", "products", "about", "contact", "pesanonline"].map((sec) => (
+            <button
+              key={sec}
+              onClick={() => goToSection(sec)}
+              className={`px-4 py-2 rounded-full transition font-semibold ${
+                sec === "pesanonline"
+                  ? "bg-yellow-700 text-xs text-white hover:bg-orange-600"
+                  : "text-yellow-700 hover:text-white hover:bg-yellow-500 dark:text-yellow-400 dark:hover:text-white"
+              }`}
+            >
+              {sec === "pesanonline"
+                ? "Pesan Online"
+                : sec.charAt(0).toUpperCase() + sec.slice(1)}
+            </button>
+          ))}
 
           {/* Desktop Search */}
           <div ref={desktopSearchRef} className="relative">
@@ -206,48 +219,6 @@ export default function Header({
                 </button>
               </div>
             </form>
-
-            {/* Desktop Search Results */}
-            <AnimatePresence>
-              {showResults && searchResults.length > 0 && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="absolute top-full mt-2 w-80 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-600 max-h-96 overflow-y-auto z-50"
-                >
-                  <div className="p-2">
-                    <div className="text-xs text-gray-500 dark:text-gray-400 px-3 py-2 border-b">
-                      {searchResults.length} hasil ditemukan
-                    </div>
-                    {searchResults.map((product) => (
-                      <div
-                        key={product.id}
-                        onClick={() => handleProductClick(product)}
-                        className="flex items-center gap-3 p-3 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer rounded-lg"
-                      >
-                        <img
-                          src={product.image}
-                          alt={product.name}
-                          className="w-12 h-12 object-cover rounded-lg"
-                        />
-                        <div className="flex-1">
-                          <h4 className="font-medium text-sm text-gray-900 dark:text-white">
-                            {product.name}
-                          </h4>
-                          <p className="text-xs text-gray-500 dark:text-gray-400">
-                            {product.category}
-                          </p>
-                          <p className="text-xs font-semibold text-yellow-600 dark:text-yellow-400">
-                            Rp {product.price?.toLocaleString()}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
           </div>
 
           {/* Dark Mode */}
@@ -255,11 +226,7 @@ export default function Header({
             onClick={() => setDark(!dark)}
             className="p-2 rounded-full hover:bg-yellow-200 dark:hover:bg-slate-700 transition"
           >
-            {dark ? (
-              <Sun size={20} className="text-yellow-500" />
-            ) : (
-              <Moon size={20} className="text-yellow-900" />
-            )}
+            {dark ? <Sun size={20} className="text-yellow-500" /> : <Moon size={20} className="text-yellow-900" />}
           </button>
 
           {/* Cart */}
@@ -273,9 +240,8 @@ export default function Header({
           </div>
         </nav>
 
-        {/* Mobile Navbar */}
-        <div ref={mobileRef} className="flex items-center gap-4 md:hidden">
-          {/* Search Icon */}
+        {/* MOBILE RIGHT ICONS */}
+        <div className="flex items-center gap-4 md:hidden">
           <button
             onClick={() => setSearchOpen(!searchOpen)}
             className="text-yellow-700 dark:text-yellow-400 text-2xl p-1 rounded-full hover:bg-yellow-200 dark:hover:bg-slate-700 transition-colors"
@@ -283,11 +249,7 @@ export default function Header({
             <FiSearch />
           </button>
 
-          {/* Cart */}
-          <div
-            className="relative cursor-pointer"
-            onClick={() => setCartOpen(true)}
-          >
+          <div className="relative cursor-pointer" onClick={() => setCartOpen(true)}>
             <ShoppingCart className="text-yellow-700 dark:text-yellow-400 hover:text-yellow-600 transition" />
             {totalItems > 0 && (
               <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
@@ -296,28 +258,16 @@ export default function Header({
             )}
           </div>
 
-          {/* Dark Mode Mobile */}
           <button
             onClick={() => setDark(!dark)}
             className="p-2 rounded-full hover:bg-yellow-200 dark:hover:bg-slate-700 transition"
           >
-            {dark ? (
-              <Sun size={20} className="text-yellow-400" />
-            ) : (
-              <Moon size={20} className="text-yellow-600" />
-            )}
-          </button>
-
-          {/* Hamburger */}
-          <button onClick={() => setOpen(!open)}>
-            <span className="text-3xl text-yellow-700 dark:text-yellow-400">
-              {open ? "✖" : "☰"}
-            </span>
+            {dark ? <Sun size={20} className="text-yellow-400" /> : <Moon size={20} className="text-yellow-600" />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Search Bar */}
+      {/* MOBILE SEARCH */}
       <AnimatePresence>
         {searchOpen && (
           <motion.div
@@ -354,55 +304,13 @@ export default function Header({
                 Cari
               </button>
             </form>
-
-            {/* Mobile Search Results */}
-            <AnimatePresence>
-              {showResults && searchResults.length > 0 && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
-                  className="mt-3 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-600 max-h-64 overflow-y-auto"
-                >
-                  <div className="p-2">
-                    <div className="text-xs text-gray-500 dark:text-gray-400 px-3 py-2 border-b">
-                      {searchResults.length} hasil ditemukan
-                    </div>
-                    {searchResults.map((product) => (
-                      <div
-                        key={product.id}
-                        onClick={() => handleProductClick(product)}
-                        className="flex items-center gap-3 p-3 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer"
-                      >
-                        <img
-                          src={product.image}
-                          alt={product.name}
-                          className="w-10 h-10 object-cover rounded-lg"
-                        />
-                        <div className="flex-1">
-                          <h4 className="font-medium text-sm text-gray-900 dark:text-white">
-                            {product.name}
-                          </h4>
-                          <p className="text-xs text-gray-500 dark:text-gray-400">
-                            {product.category}
-                          </p>
-                          <p className="text-xs font-semibold text-yellow-600 dark:text-yellow-400">
-                            Rp {product.price?.toLocaleString()}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Mobile Menu */}
+      {/* MOBILE MENU */}
       <AnimatePresence>
-        {open && (
+        {mobileMenuOpen && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
@@ -410,23 +318,21 @@ export default function Header({
             transition={{ duration: 0.4 }}
             className="md:hidden bg-gradient-to-r from-yellow-50 to-yellow-200 dark:from-slate-900 dark:to-slate-800 shadow-md flex flex-col items-center space-y-3 pb-4 overflow-hidden"
           >
-            {["home", "products", "about", "contact", "pesanonline"].map(
-              (sec) => (
-                <button
-                  key={sec}
-                  onClick={() => goToSection(sec)}
-                  className={`px-4 py-2 rounded-full w-full text-center font-semibold transition ${
-                    sec === "pesanonline"
-                      ? "bg-yellow-700 text-sm text-white w-auto hover:bg-orange-600"
-                      : "text-yellow-700 hover:text-white dark:text-yellow-500 dark:hover:text-white hover:bg-yellow-500"
-                  }`}
-                >
-                  {sec === "pesanonline"
-                    ? "Pesan Online"
-                    : sec.charAt(0).toUpperCase() + sec.slice(1)}
-                </button>
-              )
-            )}
+            {["home", "products", "about", "contact", "pesanonline"].map((sec) => (
+              <button
+                key={sec}
+                onClick={() => goToSection(sec)}
+                className={`px-4 py-2 rounded-full w-full text-center font-semibold transition ${
+                  sec === "pesanonline"
+                    ? "text-md text-yellow-700 hover:bg-yellow-500 hover:text-white"
+                    : "text-yellow-700 hover:text-white dark:text-yellow-500 dark:hover:text-white hover:bg-yellow-500"
+                }`}
+              >
+                {sec === "pesanonline"
+                  ? "Pesan Online"
+                  : sec.charAt(0).toUpperCase() + sec.slice(1)}
+              </button>
+            ))}
           </motion.div>
         )}
       </AnimatePresence>

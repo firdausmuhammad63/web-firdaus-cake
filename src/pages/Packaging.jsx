@@ -1,14 +1,13 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { FaBoxOpen } from "react-icons/fa";
 import { CheckCircle } from "lucide-react";
 
 export default function Packaging() {
   const rules = [
     "Kami tidak melayani pemesanan kue untuk perayaan ulang tahun.",
-    "Produk kami hanya diperuntukkan untuk bingkisan, kado, cenderamata, atau oleh-oleh.",
-    "Setiap packaging dibuat eksklusif agar terlihat elegan dan pantas untuk berbagai momen spesial.",
-    "Kami menjaga kualitas kemasan agar kue tetap aman dan tampil menarik.",
+    "Produk kami hanya diperuntukkan untuk bingkisan, atau kado.",
+    "Setiap packaging dibuat eksklusif agar terlihat elegan.",
+    "Kami menjaga kualitas kemasan agar kue tetap aman & menarik.",
   ];
 
   const packagingImages = [
@@ -16,54 +15,59 @@ export default function Packaging() {
   ];
 
   return (
-    <section className="bg-gradient-to-r from-yellow-50 to-yellow-200 dark:from-gray-500 dark:to-gray-900 py-16">
-      <div className="max-w-sm md:max-w-lg mx-auto px-3 mb-7">
-        {/* Header */}
-        <div className="text-center mb-7">
-          <div className="flex items-center justify-center mb-4">
-            <h1 className="text-6xl font-cake font-bold text-yellow-700 dark:text-yellow-500">
-              Aturan Packaging
-            </h1>
-          </div>
-          <p className="mt-3 text-yellow-700 font-body text-sm dark:text-yellow-200">
+    <section className="bg-gradient-to-r from-yellow-50 to-yellow-200 dark:from-gray-500 dark:to-gray-900 py-16 sm:py-20 sm:-mb-11 lg:py-24">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header Section */}
+        <motion.div 
+          initial={{ opacity: 0, y: -30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+          className="text-center mb-11 sm:mb-16 lg:mb-20"
+        >
+          <h1 className="text-5xl lg:text-8xl font-cake font-bold text-yellow-700 -mt-5 dark:text-yellow-500 mb-4">
+            Aturan Packaging
+          </h1>
+          <p className="text-lg sm:text-xl md:text-md lg:text-2xl text-yellow-700 font-body dark:text-yellow-200 max-w-4xl mx-auto leading-relaxed">
             Kami ingin setiap cake tampil elegan, layak dan berkesan.
           </p>
-        </div>
+        </motion.div>
 
-        {/* Rules List */}
-        <ul className="space-y-6">
-          {rules.map((rule, index) => (
-            <motion.li
-              key={index}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
+        {/* Rules Section */}
+        <div className="flex justify-center mb-3 -mt-4 sm:mb-16 lg:mb-20">
+          <div className="w-full max-w-5xl">
+            <motion.ul 
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: index * 0.15 }}
-              className="flex items-start font-body gap-3 text-yellow-800 dark:text-yellow-300"
+              transition={{ duration: 0.6 }}
+              className="space-y-6 sm:space-y-8 lg:space-y-10"
             >
-              <CheckCircle className="mt-1 text-yellow-600 dark:text-yellow-400 w-6 h-6 flex-shrink-0" />
-              <span>{rule}</span>
-            </motion.li>
-          ))}
-        </ul>
-
-        {/* Gambar Packaging di Tengah */}
-        <div className="mt-10 flex justify-center">
-          {packagingImages.map((img, idx) => (
-            <motion.img
-              key={idx}
-              src={img}
-              alt={`Packaging ${idx + 1}`}
-              className="w-full max-w-lg object-cover rounded-xl shadow-lg"
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              style={{ willChange: "transform, opacity" }}
-            />
-          ))}
+              {rules.map((rule, index) => (
+                <motion.lix
+                  key={index}
+                  initial={{ opacity: 0, x: -40 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ 
+                    duration: 0.6, 
+                    delay: index * 0.2,
+                    ease: "easeOut"
+                  }}
+                  className="flex items-start justify-center"
+                >
+                  <div className="flex items-start -mb-3 gap-4 sm:gap-5 lg:gap-6 max-w-3xl w-full px-6 sm:px-8 md:px-12 lg:px-16">
+                    <CheckCircle className="text-yellow-600 dark:text-yellow-400 w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 flex-shrink-0" />
+                    <span className="text-md sm:text-lg md:text-xl lg:text-xl font-body text-yellow-800 dark:text-yellow-300 leading-relaxed">
+                      {rule}
+                    </span>
+                  </div>
+                </motion.lix>
+              ))}
+            </motion.ul>
+          </div>
         </div>
-      </div>
+      </div>     
     </section>
   );
 }

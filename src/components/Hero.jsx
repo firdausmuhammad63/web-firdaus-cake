@@ -7,7 +7,7 @@ export default function Hero() {
   const [currentIcon, setCurrentIcon] = useState(0);
   const icons = [GiCakeSlice, GiCupcake, GiDonut];
 
-  // Rotasi icon setiap 2 detik
+  // Rotasi icon utama setiap 2 detik
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIcon((prev) => (prev + 1) % icons.length);
@@ -17,7 +17,7 @@ export default function Hero() {
 
   const CurrentIcon = icons[currentIcon];
 
-  // Variants untuk animasi cake utama
+  // Variants untuk animasi icon utama
   const cakeVariants = {
     hidden: { opacity: 0, scale: 0, rotate: -45 },
     visible: {
@@ -42,42 +42,55 @@ export default function Hero() {
     },
   };
 
+  // Scroll smooth ke section products
+  const scrollToProducts = (e) => {
+    e.preventDefault();
+    const element = document.getElementById("products");
+    if (element) {
+      const headerHeight = document.querySelector("header")?.offsetHeight || 80;
+      window.scrollTo({ top: element.offsetTop - headerHeight, behavior: "smooth" });
+    }
+  };
+
   return (
-    <section id="home" className="relative min-h-screen flex flex-col justify-center items-center text-center bg-gradient-to-br from-amber-50 via-yellow-100 to-orange-200 dark:from-gray-900 dark:via-gray-800 dark:to-gray-700 px-4 overflow-hidden">
+    <section
+      id="home"
+      className="relative min-h-screen flex flex-col justify-center items-center text-center bg-gradient-to-br from-amber-50 via-yellow-100 to-orange-200 dark:from-gray-900 dark:via-gray-800 dark:to-gray-700 px-4 overflow-hidden"
+    >
       {/* Floating Decorations */}
       <motion.div
         variants={floatingVariants}
         animate="animate"
-        className="absolute top-20 left-12 text-pink-400/30"
+        className="absolute top-28 left-9 text-pink-400/30"
       >
         <GiCupcake className="text-6xl" />
       </motion.div>
       <motion.div
         variants={floatingVariants}
         animate="animate"
-        className="absolute bottom-24 right-16 text-yellow-500/30"
-        style={{ animationDelay: "1s" }}
+        className="absolute bottom-20 right-16 text-yellow-500/30"
+        style={{ animationDelay: "0.5s" }}
       >
         <GiDonut className="text-7xl" />
       </motion.div>
       <motion.div
         variants={floatingVariants}
         animate="animate"
-        className="absolute top-32 right-28 text-orange-500/30"
-        style={{ animationDelay: "2s" }}
+        className="absolute top-24 right-5 text-orange-500/30"
+        style={{ animationDelay: "1s" }}
       >
         <GiCakeSlice className="text-6xl" />
       </motion.div>
-            <motion.div
+      <motion.div
         variants={floatingVariants}
         animate="animate"
-        className="absolute bottom-20 left-28 text-orange-500/30"
-        style={{ animationDelay: "2s" }}
+        className="absolute bottom-3 left-2 text-orange-500/30"
+        style={{ animationDelay: "1.5s" }}
       >
         <GiCakeSlice className="text-8xl" />
       </motion.div>
 
-      {/* Animated Cake Icon */}
+      {/* Animated Main Icon */}
       <AnimatePresence mode="wait">
         <motion.div
           key={currentIcon}
@@ -92,34 +105,27 @@ export default function Hero() {
       </AnimatePresence>
 
       {/* Title */}
-      <h1 className="text-7xl font-cake md:text-8xl font-bold mb-4 bg-gradient-to-r from-yellow-700 via-orange-600 to-red-500 dark:from-yellow-400 dark:via-orange-400 dark:to-red-400 bg-clip-text text-transparent leading-tight">
+      <h1 className="text-7xl -mt-7 md:text-8xl font-cake font-bold mb-4 bg-gradient-to-r from-yellow-700 via-orange-600 to-red-500 dark:from-yellow-400 dark:via-orange-400 dark:to-red-400 bg-clip-text text-transparent leading-tight">
         Firdaus Cake
       </h1>
-
-      {/* Subtitle */}
-      <p className="text-md px-14 font-body md:text-md lg:text-2xl text-gray-700 dark:text-gray-200 max-w-2xl mb-8 leading-relaxed">
-        ✨ Premium Cake Boutique ✨ <br />
-        Hadir dengan kue berkualitas premium, dibuat dengan cinta & bahan terbaik
-        untuk setiap momen istimewa Anda.
-      </p>
 
       {/* Stats */}
       <div className="flex flex-wrap justify-center gap-4 md:gap-8 mb-10">
         <div className="flex items-center gap-2 bg-white/30 dark:bg-gray-800/40 backdrop-blur-sm rounded-full px-4 py-2">
           <FaStar className="text-yellow-500" />
-          <span className="text-gray-700 font-body dark:text-gray-200 font-extrabold">
-            Premium Quality
+          <span className="text-gray-700 dark:text-gray-200 font-extrabold">
+            Premium Cake Quality
           </span>
         </div>
         <div className="flex items-center gap-2 bg-white/30 dark:bg-gray-800/40 backdrop-blur-sm rounded-full px-4 py-2">
           <FaHeart className="text-red-500" />
-          <span className="text-gray-700 font-body dark:text-gray-200 font-extrabold">
+          <span className="text-gray-700 dark:text-gray-200 font-extrabold">
             Made with Love
           </span>
         </div>
         <div className="flex items-center gap-2 bg-white/30 dark:bg-gray-800/40 backdrop-blur-sm rounded-full px-4 py-2">
           <FaAward className="text-orange-500" />
-          <span className="text-gray-700 font-body dark:text-gray-200 font-extrabold">
+          <span className="text-gray-700 dark:text-gray-200 font-extrabold">
             Award Winning
           </span>
         </div>
@@ -127,12 +133,12 @@ export default function Hero() {
 
       {/* CTA Buttons */}
       <div className="flex flex-wrap justify-center gap-4">
-        <a
-          href="#products"
+        <button
+          onClick={scrollToProducts}
           className="px-6 py-3 rounded-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-semibold shadow-md hover:shadow-lg transition"
         >
           See Products
-        </a>
+        </button>
         <a
           href="https://wa.me/62895413263355"
           target="_blank"

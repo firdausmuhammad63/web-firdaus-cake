@@ -3,7 +3,7 @@ import React from "react";
 export default function OrderOnline() {
   const platforms = [
     {
-      name: "Shopee Food",
+      name: "ShopeeFood",
       url: "https://shopeefood.co.id",
       svg: (
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
@@ -53,21 +53,15 @@ export default function OrderOnline() {
         {/* Header Section */}
         <div className="mb-11 text-center">
         {/* Ikon + Judul */}
-        <div className="flex items-center justify-center gap-3 mb-5 mt-0">
-            <h2 className="text-6xl font-cake md:text-7xl font-bold text-yellow-700 dark:text-yellow-500 leading-none">
-            Pesan Online dengan Mudah & Cepat
+        <div className="flex items-center justify-center gap-3 mb-5 -mt-6">
+            <h2 className="text-5xl font-cake md:text-7xl font-bold text-yellow-700 dark:text-yellow-500 leading-none">
+            Pesan Online <br /> Mudah & Cepat
             </h2>
         </div>
-
-        {/* Deskripsi */}
-        <p className="text-sm font-body px-5 text-yellow-800 dark:text-gray-300 mb-6 max-w-2xl mx-auto leading-relaxed">
-            Nikmati kenyamanan memesan makanan favorit Anda melalui platform online terpercaya. 
-            Pilih platform kesayangan Anda dan mulai menikmati pengalaman kuliner yang tak terlupakan.
-        </p>
         </div>
 
         {/* Platform Cards */}
-        <div className="grid grid-cols-3 md:grid-cols-3 gap-4 md:gap-6 mb-5">
+        <div className="grid grid-cols-3 md:grid-cols-3 gap-4 md:gap-6 mb-1">
           {platforms.map((platform, index) => (
             <div
               key={index}
@@ -105,7 +99,7 @@ export default function OrderOnline() {
                 
                 {/* Call to action */}
                 <span className="relative text-xs opacity-90 group-hover:opacity-100 transition-opacity duration-300">
-                  Pesan Sekarang
+                  Pesan Yuk!
                 </span>
 
                 {/* Arrow icon */}

@@ -33,13 +33,13 @@ export default function Contact() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="flex items-center justify-center gap-3 text-yellow-700 dark:text-yellow-400 mb-12"
+        className="flex items-center justify-center gap-3 text-yellow-700 dark:text-yellow-400 mb-10"
       >
-        <h3 className="text-6xl font-cake font-extrabold">Let’s Connect</h3>
+        <h3 className="text-5xl font-cake font-extrabold -mt-8">Hubungi Kami</h3>
       </motion.div>
 
 
-      <div className="max-w-3xl mx-auto px-6 flex-col md:flex-row justify-center items-center gap-10 mb-5">
+      <div className="max-w-3xl mx-auto px-6 flex-col md:flex-row justify-center items-center gap-10">
         {/* Form */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}

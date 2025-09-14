@@ -12,7 +12,7 @@ export default function OurLocation() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7, ease: "easeOut" }}
-          className="text-7xl font-cake font-bold -mt-3 text-yellow-700 dark:text-yellow-500"
+          className="text-5xl font-cake font-bold -mt-8 text-yellow-700 dark:text-yellow-500"
         >
           Our Location
         </motion.h3>
@@ -21,7 +21,7 @@ export default function OurLocation() {
         <motion.div
           whileHover={{ scale: 1.02 }}
           transition={{ duration: 0.5 }}
-          className="w-full max-w-3xl h-96 rounded-2xl overflow-hidden shadow-xl"
+          className="w-full max-w-3xl h-52 rounded-2xl overflow-hidden shadow-xl -mt-5"
         >
           <iframe
             title="Firdaus Cake Location"
@@ -36,13 +36,13 @@ export default function OurLocation() {
         </motion.div>
 
         {/* Kontak */}
-        <div className="flex flex-col md:flex-row justify-center items-center gap-8 text-yellow-900 dark:text-yellow-200">
+        <div className="flex flex-col md:flex-row gap-8 -mt-3 text-yellow-900 -mb-5 dark:text-yellow-200">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="flex items-center gap-3"
+            className="flex items-center gap-3 -mb-3"
           >
             <motion.div
               animate={{ scale: [1, 1.2, 1] }}
@@ -50,8 +50,8 @@ export default function OurLocation() {
             >
               <FaMapMarkerAlt className="text-2xl text-yellow-700 dark:text-yellow-500" />
             </motion.div>
-            <span className="font-semibold font-body text-lg dark:text-yellow-500">
-              123 Premium Street, Jakarta, Indonesia
+            <span className="font-semibold font-body -mb-3 text-left text-lg dark:text-yellow-500">
+              Srengseng Sawah, Jakarta Selatan
             </span>
           </motion.div>
 
@@ -68,7 +68,7 @@ export default function OurLocation() {
             >
               <FaPhoneAlt className="text-2xl text-yellow-700 dark:text-yellow-500" />
             </motion.div>
-            <span className="font-semibold font-body text-lg dark:text-yellow-500">
+            <span className="font-semibold font-body text-lg -mb-2 dark:text-yellow-500">
               +62 895 4132 63355
             </span>
           </motion.div>
